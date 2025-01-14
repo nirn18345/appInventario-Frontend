@@ -1,0 +1,122 @@
+<mat-card class="p-4 shadow-lg">
+    <mat-card-title class="mb-3">{{ isEditMode ? 'Editar Producto' : 'Agregar Nuevo Producto' }}</mat-card-title>
+    <mat-card-content>
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="row">
+            <!-- Nombre -->
+            <mat-form-field appearance="outline" class="w-full col-md-8">
+                <mat-label>Nombre</mat-label>
+                <input matInput placeholder="Ingrese el nombre del producto" formControlName="nombre" required />
+                <mat-error *ngIf="productForm.get('nombre')?.invalid">El nombre es obligatorio</mat-error>
+            </mat-form-field>
+
+            <div formArrayName="productoPrecios" class="w-full mt-3">
+                <div *ngFor="let loteControl of productoPrecios.controls; let i = index;" [formGroupName]="i"
+                    class="d-flex gap-2 align-items-center">
+                    <!-- Selección de Lote -->
+                    <mat-form-field appearance="outline" class="w-50">
+                        <mat-label>Lote</mat-label>
+                        <mat-select formControlName="loteID" required>
+                            <mat-option *ngFor="let lote of availableLotes" [value]="lote.loteID">
+                                {{ lote.numeroLote }} -- {{ lote.descripcion }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="loteControl.get('lote')?.invalid">Debe seleccionar un lote</mat-error>
+                    </mat-form-field>
+
+                    <!-- Precio del Lote -->
+                    <mat-form-field appearance="outline" class="w-25">
+                        <mat-label>Precio</mat-label>
+                        <input matInput type="number" placeholder="Ingrese el precio" formControlName="precio"
+                            required />
+                        <span matTextPrefix>$&nbsp;</span>
+                        <mat-error *ngIf="loteControl.get('precio')?.invalid">El precio es obligatorio</mat-error>
+                    </mat-form-field>
+
+
+                    <!-- Cantidad del Lote -->
+                    <mat-form-field appearance="outline" class="w-25">
+                        <mat-label>Cantidad</mat-label>
+                        <input matInput type="number" placeholder="Ingrese la cantidad" formControlName="cantidad"
+                            required />
+                        <span matTextPrefix>$&nbsp;</span>
+                        <mat-error *ngIf="loteControl.get('cantidad')?.invalid">La cantidad es obligatoria</mat-error>
+                    </mat-form-field>
+
+
+                    <mat-form-field appearance="outline" class="w-25">
+                        <mat-label>Fecha Inicio</mat-label>
+                        <input matInput [matDatepicker]="pickerInicio" formControlName="fechaInicio" required />
+                        <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerInicio></mat-datepicker>
+                        <mat-error *ngIf="loteControl.get('fechaInicio')?.invalid">
+                            La fecha de inicio es obligatoria
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-25">
+                        <mat-label>Fecha Fin</mat-label>
+                        <input matInput [matDatepicker]="pickerFin" formControlName="fechaFin" />
+                        <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFin></mat-datepicker>
+                        <mat-error *ngIf="loteControl.get('fechaFin')?.invalid">
+                            La fecha fin es obligatoria
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- Botón para eliminar -->
+                    <button mat-icon-button color="warn" (click)="removeLote(i)" type="button">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+
+                </div>
+            </div>
+            <div class="mt-2" style="margin-bottom: 16px;">
+                <button mat-raised-button color="primary" type="button" (click)="addLote()">Agregar Lote</button>
+            </div>
+
+            <!-- Descripción -->
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Descripción</mat-label>
+                <textarea matInput placeholder="Ingrese la descripción del producto" formControlName="descripcion"
+                    rows="3"></textarea>
+            </mat-form-field>
+
+
+
+
+
+
+            <!-- Estado -->
+            <mat-form-field appearance="outline" class="w-full col-md-6">
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="estado" required>
+                    <mat-option value="Activo">Activo</mat-option>
+                    <mat-option value="Inactivo">Inactivo</mat-option>
+                </mat-select>
+                <mat-error *ngIf="productForm.get('estado')?.invalid">Debe seleccionar un estado</mat-error>
+            </mat-form-field>
+
+            <!-- URL de la Imagen -->
+            <mat-form-field appearance="outline" class="w-full col-md-6">
+                <mat-label>URL de la Imagen</mat-label>
+                <input matInput placeholder="Ingrese la URL de la imagen" formControlName="imagen" />
+            </mat-form-field>
+
+            <div class="w-full col-md-6 text-center">
+                <img [src]="productForm.get('imagen')?.value" width="150px">
+            </div>
+
+
+
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button mat-raised-button color="primary" type="submit" [disabled]="productForm.invalid">
+                    {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+                </button>
+                <button mat-raised-button color="warn" type="button" (click)="onCancel()">Cancelar</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

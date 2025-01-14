@@ -1,0 +1,40 @@
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <mat-card class="p-4 shadow-lg w-100" style="max-width: 400px;">
+    <mat-card-title class="text-center mb-4">
+      <h3>Iniciar Sesión</h3>
+    </mat-card-title>
+
+    <mat-card-content>
+      <form (ngSubmit)="onLogin()">
+        <!-- Usuario -->
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Usuario</mat-label>
+          <input matInput placeholder="Ingresa tu usuario" [(ngModel)]="username" name="username" required />
+        </mat-form-field>
+
+        <!-- Contraseña -->
+        <mat-form-field appearance="outline" class="w-100 mb-4">
+          <mat-label>Clave</mat-label>
+          <input matInput [type]="hide() ? 'password' : 'text'" placeholder="Ingresa tu clave" [(ngModel)]="password"
+            name="password" required />
+          <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()">
+            <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <!-- Botón de Iniciar Sesión -->
+        <mat-card-actions class="d-flex justify-content-center">
+          <button mat-raised-button color="primary" class="w-100" [disabled]="loading">
+            {{ loading ? 'Iniciando...' : 'Iniciar Sesión' }}
+          </button>
+        </mat-card-actions>
+      </form>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMessage" class="text-danger mt-3 text-center">
+        {{ errorMessage }}
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

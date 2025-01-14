@@ -1,0 +1,19 @@
+<div class="d-flex flex-column" style="height: 100vh;">
+  <header *ngIf="isLoggedIn" class="bg-secondary text-white p-2 shadow-lg d-flex justify-content-between align-items-center">
+    <h1>Sistema de Inventario</h1>
+    <button mat-raised-button class="text-white bg-secondary" style="border: none;" (click)="onLogout()">
+      <mat-icon>
+        logout
+        </mat-icon>
+    </button>
+  </header>
+
+  <main class="p-4" style="flex: 1;">
+    <app-login *ngIf="!isLoggedIn"></app-login>
+    <router-outlet *ngIf="isLoggedIn"></router-outlet>
+  </main>
+
+  <footer *ngIf="isLoggedIn" class="bg-secondary text-white text-center p-2" style="position: fixed; bottom: 0; width: 100%;">
+    <p>&copy; {{ currentYear }} Sistema de Inventario. Todos los derechos reservados.</p>
+  </footer>
+</div>
